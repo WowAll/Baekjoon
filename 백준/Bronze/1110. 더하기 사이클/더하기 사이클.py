@@ -1,10 +1,10 @@
-def newnum(n, origin):
-    if n == origin:
+def makenum(n):
+    temp = n // 10 + n % 10
+    return (n % 10) * 10 + temp % 10
+def cycle(n, origin):
+    newnum = makenum(n)
+    if newnum == origin:
         return 1
-    else:
-        num = (n % 10) + (n // 10)
-        return 1 + newnum(n % 10 * 10 + num % 10, origin)
-    
+    return 1 + cycle(newnum, origin)
 num = int(input())
-first = ((num % 10 + num // 10) % 10) + num % 10 * 10
-print(newnum(first, num))
+print(cycle(num, num))

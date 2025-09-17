@@ -9,11 +9,11 @@ def cal_scale(arr, left, right):
     unit = arr[mid]
     len = right - left + 1
     peak = unit * len
-
     while True :
+        if res > peak:
+            return res
         left_in_bound = left_cursor >= left
         right_in_bound = right_cursor <= right
-
         if not left_in_bound and not right_in_bound:
             return res
         if left_in_bound and (not right_in_bound or arr[left_cursor] >= arr[right_cursor]):
@@ -26,17 +26,14 @@ def cal_scale(arr, left, right):
         if selected < unit:
             unit = selected
             peak = unit * len
-
-        temp = unit * cnt
-        if temp > res:
-            res = temp
-            if res > peak:
-                return res
+        res = max(res, unit * cnt)
 
 def histogram(arr, left, right):
+    if left > right:
+        return 0
+    if left == right:
+        return arr[left]
     mid = left + (right - left) // 2
-    if left >= right:
-        return arr[mid]
     res = 0
     left_res = histogram(arr, left , mid - 1)
     right_res = histogram(arr, mid + 1, right)

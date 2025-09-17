@@ -2,37 +2,26 @@ import sys
 
 def cal_scale(arr, left, right):
     mid = left + (right - left) // 2
-    temp = arr[mid]
-    res = temp
     left_cursor = mid - 1
     right_cursor = mid + 1
     len = 1
+    res = arr[mid]
     unit = arr[mid]
 
-    while res <= unit * (right - left + 1) :
-        if left_cursor < left and right_cursor > right:
+    while True :
+        left_in_bound = left_cursor >= left
+        right_in_bound = right_cursor <= right
+        if not left_in_bound and not right_in_bound:
             return res
-        if left_cursor >= left and right_cursor <= right:
-            if arr[left_cursor] > arr[right_cursor]:
-                selected = arr[left_cursor]
-                left_cursor -= 1
-            else:
-                selected = arr[right_cursor]
-                right_cursor += 1
+        if left_in_bound and (not right_in_bound or arr[left_cursor] >= arr[right_cursor]):
+            selected = arr[left_cursor]
+            left_cursor -= 1
         else:
-            if left_cursor < left:
-                selected = arr[right_cursor]
-                right_cursor += 1
-            else:
-                selected = arr[left_cursor]
-                left_cursor -= 1
+            selected = arr[right_cursor]
+            right_cursor += 1
         len += 1
-        if selected > unit:
-            temp += unit
-        else:
-            unit = selected
-            temp = selected * len
-        res = max(temp, res)
+        unit = min(selected, unit)
+        res = max(res, unit * len)
     return res
 
 def histogram(arr, left, right):

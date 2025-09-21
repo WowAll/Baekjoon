@@ -10,11 +10,12 @@ def dfs(arr, vis, room, cur):
     if vis[cur]:
         return
     if room[cur] == 1:
-        cnt += 1
+        cnt += 2
         return
     vis[cur] = True
     for i in arr[cur]:
         dfs(arr, vis, room, i)
+    vis[cur] = False
 
 inout = str(sys.stdin.readline().strip())
 room = []
@@ -28,12 +29,12 @@ for i in range(V - 1):
     arr[src].append(dest)
     arr[dest].append(src)
 
+vis = [False for _ in range(V + 1)]
+
 for i in range(1, V + 1):
     if room[i] == 0:
         continue
-    vis = [False for _ in range(V + 1)]
     for J in arr[i]:
         vis[i] = True
         dfs(arr, vis, room, J)
-        vis[i] = False
 print(cnt)

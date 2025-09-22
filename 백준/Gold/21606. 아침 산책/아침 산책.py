@@ -3,38 +3,43 @@ sys.setrecursionlimit(10**6)
 
 V = int(sys.stdin.readline().strip())
 
-cnt = 0
+ans = 0
 
-def dfs(arr, vis, room, cur):
-    global cnt
-    if vis[cur]:
-        return
-    if room[cur] == 1:
-        cnt += 2
-        return
+def dfs(cur):
     vis[cur] = True
+    cnt = 0
     for i in arr[cur]:
-        dfs(arr, vis, room, i)
-    vis[cur] = False
+        if room[i] == 1:
+            cnt += 1
+        elif not vis[i] and room[i] == 0:
+            cnt += dfs(i)
+    return cnt
 
 inout = str(sys.stdin.readline().strip())
 room = []
 room.append(0)
-for i in inout:
-    room.append(ord(i) - ord('0'))
-arr = [[] for _ in range(V + 1)]
-
-for i in range(V - 1):
-    src, dest = map(int, sys.stdin.readline().strip().split())
-    arr[src].append(dest)
-    arr[dest].append(src)
 
 vis = [False for _ in range(V + 1)]
 
-for i in range(1, V + 1):
-    if room[i] == 0:
+for i in range(0, V):
+    temp = ord(inout[i]) - ord('0')
+    room.append(temp)
+
+arr = [[] for _ in range(V + 1)]
+connect = [0 for _ in range(V + 1)]
+
+for i in range(V - 1):
+    src, dest = map(int, sys.stdin.readline().strip().split())
+    if room[src] == room[dest] and room[src] == 1:
+        ans += 2
+    else:
+        arr[src].append(dest)
+        arr[dest].append(src)
+
+for i in range(1, V + 1): 
+    if vis[i] == True:
         continue
-    for J in arr[i]:
-        vis[i] = True
-        dfs(arr, vis, room, J)
-print(cnt)
+    if room[i] == 0:
+        temp = dfs(i)
+        ans += (temp) * (temp - 1)
+print(ans)
